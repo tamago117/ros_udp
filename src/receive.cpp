@@ -7,18 +7,39 @@
 #include "simple_udp.h"
 simple_udp udp0("192.168.253.2",9090);
 
-std::vector<string> split(string str, string separator){
-  if (separator == "") return {str};
-  std::vector<string> result;
-  std::string tstr = str + separator;
-  long l = tstr.length(), sl = separator.length();
-  std::string::size_type pos = 0, prev = 0;
-
-  for(; pos < 1 && (pos = tstr.find(separator, pos)) != string::npos; prev = (pos += sl)){
-    result.emplace_back(tstr, prev, pos - prev);
+template<class T> std::vector<std::string> split(const std::string& s, const T& separator, bool ignore_empty = 0, bool split_empty = 0) {
+  struct {
+    auto len(const std::string&             s) { return s.length(); }
+    auto len(const std::string::value_type* p) { return p ? std::char_traits<std::string::value_type>::length(p) : 0; }
+    auto len(const std::string::value_type  c) { return c == std::string::value_type() ? 0 : 1; /*return 1;*/ }
+  } util;
+  
+  if (s.empty()) { /// empty string ///
+    if (!split_empty || util.len(separator)) return {""};
+    return {};
   }
-
-  return result;
+  
+  auto v = std::vector<std::string>();
+  auto n = static_cast<std::string::size_type>(util.len(separator));
+  if (n == 0) {    /// empty separator ///
+    if (!split_empty) return {s};
+    for (auto&& c : s) v.emplace_back(1, c);
+    return v;
+  }
+  
+  auto p = std::string::size_type(0);
+  while (1) {      /// split with separator ///
+    auto pos = s.find(separator, p);
+    if (pos == std::string::npos) {
+      if (ignore_empty && p - n + 1 == s.size()) break;
+      v.emplace_back(s.begin() + p, s.end());
+      break;
+    }
+    if (!ignore_empty || p != pos)
+      v.emplace_back(s.begin() + p, s.begin() + pos);
+    p = pos + n;
+  }
+  return v;
 }
 
 int main(int argc, char **argv){
@@ -26,22 +47,26 @@ int main(int argc, char **argv){
   ros::init(argc, argv, "UDPreceive");
   ros::NodeHandle nh;
   ros::Rate loop_rate(10);
-  ros::Publisher pub= nh.advertise<std_msgs::Float32MultiArray>("array",10);
+  ros::Publisher pub= nh.advertise<std_msgs::Float32MultiArray>("receivedUDP",10);
 
   while (ros::ok())
   {
     std_msgs::Float32MultiArray array;
     std::string rdata = udp0.udp_recv();
-    std::vector<string> ary = split(rdata, ",");
+    std::vector<std::string> ary = split(rdata, ",");
 
+    std::cout<<ary.size()<<std::endl;
+    //std::cout<<ary[0]<<std::endl;
+    
     //string->float
-    for(int i=0; i<ary.size(); i++){
-      array.data[i] = std::stod(ary[i]);
-    }
+    /*for(int i=0; i<ary.size(); i++){
+      array.data[i] = std::stof(ary[i]);
+    }*/
 
-    ROS_INFO("receive: %s", rdata.c_str());
+    //ROS_INFO("receive: %s", ary[0].c_str());
+    //ROS_INFO("receive: %s", rdata.c_str());
 
-    pub.publish(array);
+    //pub.publish(array);
     ros::spinOnce();
     loop_rate.sleep();
   }

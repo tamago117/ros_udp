@@ -214,3 +214,5 @@ add_executable(sent src/sent.cpp)
 target_link_libraries(sent
   ${catkin_LIBRARIES}
 )
+
+add_definitions(-std=c++14)
