@@ -55,18 +55,17 @@ int main(int argc, char **argv){
     std::string rdata = udp0.udp_recv();
     std::vector<std::string> ary = split(rdata, ",");
 
-    std::cout<<ary.size()<<std::endl;
-    //std::cout<<ary[0]<<std::endl;
+    //td::cout<<ary.size()<<std::endl;
+    //std::cout<<ary[1]<<std::endl;
     
     //string->float
-    /*for(int i=0; i<ary.size(); i++){
+    for(int i=0; i<ary.size(); i++){
+      array.data.resize(ary.size());
       array.data[i] = std::stof(ary[i]);
-    }*/
+      //ROS_INFO("receive: %f", array.data[i]);
+    }
 
-    //ROS_INFO("receive: %s", ary[0].c_str());
-    //ROS_INFO("receive: %s", rdata.c_str());
-
-    //pub.publish(array);
+    pub.publish(array);
     ros::spinOnce();
     loop_rate.sleep();
   }
