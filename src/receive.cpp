@@ -53,16 +53,16 @@ int main(int argc, char **argv){
   {
     std_msgs::Float32MultiArray array;
     std::string rdata = udp0.udp_recv();
+    if(rdata=="timeout"){
+      return 0;
+    }
     std::vector<std::string> ary = split(rdata, ",");
 
-    //td::cout<<ary.size()<<std::endl;
-    //std::cout<<ary[1]<<std::endl;
-    
     //string->float
     for(int i=0; i<ary.size(); i++){
       array.data.resize(ary.size());
       array.data[i] = std::stof(ary[i]);
-      //ROS_INFO("receive: %f", array.data[i]);
+      ROS_INFO("receive: %f", array.data[i]);
     }
 
     pub.publish(array);
