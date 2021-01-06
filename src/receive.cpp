@@ -1,5 +1,4 @@
 #include <ros/ros.h>
-#include <stdio.h>
 #include <string>
 #include <vector>
 #include <std_msgs/Float32MultiArray.h>
@@ -62,8 +61,9 @@ int main(int argc, char **argv){
     for(int i=0; i<ary.size(); i++){
       array.data.resize(ary.size());
       array.data[i] = std::stof(ary[i]);
-      ROS_INFO("receive: %f", array.data[i]);
+      //ROS_INFO("receive: %f", array.data[i]);
     }
+    std::cout<<" "<<std::endl;
 
     pub.publish(array);
     ros::spinOnce();

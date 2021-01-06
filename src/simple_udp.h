@@ -46,16 +46,17 @@ public:
         #define BUFFER_MAX 200
         char buf[BUFFER_MAX]; //storing received data
         memcpy(&fds, &readfds, sizeof(fd_set));
-        memset(buf, 0, sizeof(buf)); //initialize
+        
         int n = select(sock+1, &fds, NULL, NULL, &tv);
         // timeout
         if (n == 0) {
-		ROS_ERROR("timeout");
-        return "timeout";
+		    ROS_ERROR("timeout");
+            return "timeout";
 	    }
         //receive
         if (FD_ISSET(sock, &fds)) {
-        recv(sock, buf, sizeof(buf), 0); //receive
+            memset(buf, 0, sizeof(buf)); //initialize
+            recv(sock, buf, sizeof(buf), 0); //receive
         }
         return std::string(buf);
     }
