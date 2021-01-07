@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "simple_udp.h"
-simple_udp udp0("192.168.253.1",9080);
+simple_udp udp0("192.168.253.1",9070);
 
 std::vector<float> send_data_array;
 std::string send_data;
@@ -26,9 +26,7 @@ int main(int argc, char **argv){
   ros::NodeHandle nh;
   ros::Subscriber sub = nh.subscribe("sentUDP", 10, callback);
   
-  ros::Rate loop_rate(10);
-  ros::spinOnce();
-  loop_rate.sleep();
+  ros::spin();
   
   return 0;
 }
