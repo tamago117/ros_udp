@@ -13,6 +13,7 @@ void callback(const std_msgs::Float32MultiArray& array)
 {
   send_data_array = array.data;
   send_data = std::to_string(send_data_array[0]);
+  //combine string data
   for(int i=1; i<send_data_array.size(); i++){
     send_data.append(separator + std::to_string(send_data_array[i]));
   }
