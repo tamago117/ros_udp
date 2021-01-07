@@ -45,23 +45,23 @@ int main(int argc, char **argv){
   udp0.udp_bind();
   ros::init(argc, argv, "UDPreceive");
   ros::NodeHandle nh;
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(100);
   ros::Publisher pub= nh.advertise<std_msgs::Float32MultiArray>("receivedUDP",10);
+  std_msgs::Float32MultiArray array;
 
   while (ros::ok())
   {
-    std_msgs::Float32MultiArray array;
     std::string rdata = udp0.udp_recv();
     if(rdata=="timeout"){
       return 0;
     }
     std::vector<std::string> ary = split(rdata, ",");
+    array.data.resize(ary.size());
 
     //string->float
     for(int i=0; i<ary.size(); i++){
-      array.data.resize(ary.size());
       array.data[i] = std::stof(ary[i]);
-      //ROS_INFO("receive: %f", array.data[i]);
+      ROS_INFO("receive: %f", array.data[i]);
     }
     std::cout<<" "<<std::endl;
 
