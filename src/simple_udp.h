@@ -25,7 +25,7 @@ public:
         addr.sin_family = AF_INET; //address family(ipv4)
         addr.sin_addr.s_addr = inet_addr(address.c_str()); //IP adress,inet_addr() : translate address
         addr.sin_port = htons(port); //port number
-        tv.tv_sec = 3;
+        tv.tv_sec = 10;
         tv.tv_usec = 0;
     }
     void udp_send(std::string word){

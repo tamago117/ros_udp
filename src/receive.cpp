@@ -4,7 +4,6 @@
 #include <std_msgs/Float32MultiArray.h>
 #include <iostream>
 #include "simple_udp.h"
-simple_udp udp0("192.168.253.2",9090);
 
 template<class T> std::vector<std::string> split(const std::string& s, const T& separator, bool ignore_empty = 0, bool split_empty = 0) {
   struct {
@@ -42,15 +41,22 @@ template<class T> std::vector<std::string> split(const std::string& s, const T& 
 }
 
 int main(int argc, char **argv){
-  udp0.udp_bind();
+  std::string IPadress = "0.0.0.0";
+  int portNumber = 9090;
+  
   ros::init(argc, argv, "UDPreceive");
   ros::NodeHandle nh;
-  ros::Rate loop_rate(100);
+  ros::NodeHandle pnh("~");
+  ros::Rate loop_rate(500);
   ros::Publisher pub= nh.advertise<std_msgs::Float32MultiArray>("receivedUDP",10);
+  pnh.getParam("ReceiverIP", IPadress);
+  pnh.getParam("ReceiverPort", portNumber);
   std_msgs::Float32MultiArray array;
 
   while (ros::ok())
   {
+    simple_udp udp0(IPadress, portNumber);
+    udp0.udp_bind();
     std::string rdata = udp0.udp_recv();
     if(rdata=="timeout"){
       return 0;

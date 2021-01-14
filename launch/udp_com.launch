@@ -1,0 +1,14 @@
+<launch>
+    <arg name="clientIP" default="192.168.253.1"/>
+    <arg name="clientPort" default="9070"/>
+    <arg name="receiverIP" default="192.168.253.2"/>
+    <arg name="receiverPort" default="9090"/>
+    <node name="udpSent" pkg="ros_udp" type="sent" respawn="true">
+        <param name="clientIP" value="$(arg clientIP)"/>
+        <param name="clientPort" value="$(arg clientPort)"/>
+    </node>
+    <node name="udpReceive" pkg="ros_udp" type="receive" output="screen">
+        <param name="receiverIP" value="$(arg receiverIP)"/>
+        <param name="receiverPort" value="$(arg receiverPort)"/>
+    </node>
+</launch>

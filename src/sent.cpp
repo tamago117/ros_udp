@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include "simple_udp.h"
-simple_udp udp0("192.168.253.1",9070);
 
 std::vector<float> send_data_array;
 std::string send_data;
@@ -17,16 +16,26 @@ void callback(const std_msgs::Float32MultiArray& array)
   for(int i=1; i<send_data_array.size(); i++){
     send_data.append(separator + std::to_string(send_data_array[i]));
   }
-    udp0.udp_send(send_data);
     //ROS_INFO("subscribe: %f", send_data_array.data);
 }
 
 int main(int argc, char **argv){
+  std::string IPadress = "192.168.253.1";
+  int portNumber = 9070;
+
   ros::init(argc, argv, "sentUDP");
   ros::NodeHandle nh;
+  ros::NodeHandle pnh("~");
+  pnh.getParam("clientIP", IPadress);
+  pnh.getParam("clientPort", portNumber);
+  simple_udp udp0(IPadress, portNumber);
   ros::Subscriber sub = nh.subscribe("sentUDP", 10, callback);
   
-  ros::spin();
-  
+  ros::Rate loop_rate(10);
+  while(ros::ok()){
+    udp0.udp_send(send_data);
+    ros::spinOnce();
+    loop_rate.sleep();
+  }
   return 0;
 }
