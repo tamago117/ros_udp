@@ -47,16 +47,17 @@ int main(int argc, char **argv){
   ros::init(argc, argv, "UDPreceive");
   ros::NodeHandle nh;
   ros::NodeHandle pnh("~");
-  ros::Rate loop_rate(100);
+  ros::Rate loop_rate(500);
   ros::Publisher pub= nh.advertise<std_msgs::Float32MultiArray>("receivedUDP",10);
-  pnh.getParam("clientIPadress", IPadress);
-  pnh.getParam("clientPortNumber", portNumber);
-  simple_udp udp0(IPadress, portNumber);
-  udp0.udp_bind();
+  pnh.getParam("ReceiverIP", IPadress);
+  pnh.getParam("ReceiverPort", portNumber);
+  
   std_msgs::Float32MultiArray array;
 
   while (ros::ok())
   {
+    simple_udp udp0(IPadress, portNumber);
+    udp0.udp_bind();
     std::string rdata = udp0.udp_recv();
     if(rdata=="timeout"){
       return 0;
