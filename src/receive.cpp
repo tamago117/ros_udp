@@ -51,6 +51,7 @@ int main(int argc, char **argv){
   ros::Publisher pub= nh.advertise<std_msgs::Float32MultiArray>("receivedUDP",10);
   pnh.getParam("ReceiverIP", IPadress);
   pnh.getParam("ReceiverPort", portNumber);
+  
   std_msgs::Float32MultiArray array;
 
   while (ros::ok())
