@@ -51,7 +51,6 @@ int main(int argc, char **argv){
   ros::Publisher pub= nh.advertise<std_msgs::Float32MultiArray>("receivedUDP",10);
   pnh.getParam("ReceiverIP", IPadress);
   pnh.getParam("ReceiverPort", portNumber);
-  
   std_msgs::Float32MultiArray array;
 
   while (ros::ok())
@@ -62,6 +61,7 @@ int main(int argc, char **argv){
     if(rdata=="timeout"){
       return 0;
     }
+    //std::cout<<rdata<<std::endl;
     std::vector<std::string> ary = split(rdata, ",");
     array.data.resize(ary.size());
 
