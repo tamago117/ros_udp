@@ -47,11 +47,9 @@ int main(int argc, char **argv){
   ros::init(argc, argv, "UDPreceive");
   ros::NodeHandle nh;
   ros::NodeHandle pnh("~");
-  ros::Rate loop_rate(500);
   ros::Publisher pub= nh.advertise<std_msgs::Float32MultiArray>("receivedUDP",10);
   pnh.getParam("ReceiverIP", IPadress);
   pnh.getParam("ReceiverPort", portNumber);
-  
   std_msgs::Float32MultiArray array;
 
   while (ros::ok())
@@ -62,19 +60,19 @@ int main(int argc, char **argv){
     if(rdata=="timeout"){
       return 0;
     }
+    //std::cout<<rdata<<std::endl;
     std::vector<std::string> ary = split(rdata, ",");
     array.data.resize(ary.size());
 
     //string->float
     for(int i=0; i<ary.size(); i++){
       array.data[i] = std::stof(ary[i]);
-      ROS_INFO("receive: %f", array.data[i]);
+      //ROS_INFO("receive: %f", array.data[i]);
     }
-    std::cout<<" "<<std::endl;
+    //std::cout<<" "<<std::endl;
 
     pub.publish(array);
     ros::spinOnce();
-    loop_rate.sleep();
   }
   return 0;
 }

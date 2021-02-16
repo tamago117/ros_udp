@@ -20,16 +20,14 @@ void callback(const std_msgs::Float32MultiArray& array)
 }
 
 int main(int argc, char **argv){
-  std::string IPadress = "192.168.253.1";
+  std::string IPadress = "192.168.0.200";
   int portNumber = 9070;
-
 
   ros::init(argc, argv, "sentUDP");
   ros::NodeHandle nh;
   ros::NodeHandle pnh("~");
   pnh.getParam("clientIP", IPadress);
   pnh.getParam("clientPort", portNumber);
-
   simple_udp udp0(IPadress, portNumber);
   ros::Subscriber sub = nh.subscribe("sentUDP", 10, callback);
   

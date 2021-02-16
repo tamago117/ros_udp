@@ -39,7 +39,7 @@ public:
 
     }
     std::string udp_recv(){
-        #define BUFFER_MAX 200
+        #define BUFFER_MAX 400
         char buf[BUFFER_MAX]; //storing received data
         memcpy(&fds, &readfds, sizeof(fd_set));
         n = select(sock+1, &fds, NULL, NULL, &tv);
