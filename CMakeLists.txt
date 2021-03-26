@@ -214,5 +214,13 @@ add_executable(sent src/sent.cpp)
 target_link_libraries(sent
   ${catkin_LIBRARIES}
 )
+add_executable(receive_micom src/receive_micom.cpp)
+target_link_libraries(receive_micom
+  ${catkin_LIBRARIES}
+)
+add_executable(sent_micom src/sent_micom.cpp)
+target_link_libraries(sent_micom
+  ${catkin_LIBRARIES}
+)
 
 add_definitions(-std=c++14)

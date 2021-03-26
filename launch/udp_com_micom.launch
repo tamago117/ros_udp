@@ -3,11 +3,11 @@
     <arg name="clientPort" default="9070"/>
     <arg name="receiverIP" default="192.168.0.100"/>
     <arg name="receiverPort" default="9090"/>
-    <node name="udpSent" pkg="ros_udp" type="sent" respawn="true">
+    <node name="udpSent" pkg="ros_udp" type="sent_micom" respawn="true">
         <param name="clientIP" value="$(arg clientIP)"/>
         <param name="clientPort" value="$(arg clientPort)"/>
     </node>
-    <node name="udpReceive" pkg="ros_udp" type="receive" output="screen" respawn="true">
+    <node name="udpReceive" pkg="ros_udp" type="receive_micom" output="screen" respawn="true">
         <param name="receiverIP" value="$(arg receiverIP)"/>
         <param name="receiverPort" value="$(arg receiverPort)"/>
     </node>
