@@ -58,8 +58,8 @@ float byte_toFloat(char bytearr[4]){
 }
 
 int main(int argc, char **argv){
-    std::string IPadress = "0.0.0.0";
-    int portNumber = 9090;
+    std::string IPadress = "192.168.1.177";
+    int portNumber = 8888;
 
     ros::init(argc, argv, "UDPreceive");
     ros::NodeHandle nh;
@@ -81,6 +81,7 @@ int main(int argc, char **argv){
         if(rdata=="timeout"){
             return 0;
         }
+        std::cout<<rdata<<std::endl;
 
         int iNumber = (int8_t)rdata[0];
         int fNumber = (int8_t)rdata[1];
